@@ -32,13 +32,13 @@ binary_labels = {
     1: "Occur",
     0: "Not Occur"
 }
-print(list(district_labels.values()))
+# print(list(district_labels.values()))
 # Invert the district_labels dictionary to create a mapping from names to keys
 district_names_to_keys = {v: k for k, v in district_labels.items()}
 
 # Replace district names in the DataFrame column with their corresponding keys
 data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(district_names_to_keys)
-print(data['ชื่อจังหวัด'])
+# print(data['ชื่อจังหวัด'])
 
 # Define features and target variable
 features = ['ชื่อจังหวัด', 'ปีละครั้ง1มากกว่า', '2 ปีต่อครั้ง', '3 ปีต่อครั้ง', '4-9 ปีต่อครั้ง', '10 ปีต่อครั้ง1น้อยกว่า',
@@ -54,10 +54,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 
 # Initialize the Random Forest Classifier
-model = RandomForestClassifier(n_estimators=100, random_state=42)  # You can adjust the number of estimators (n_estimators) as needed
+model = RandomForestClassifier(n_estimators=100, random_state=42)  
 
-# Train the Random Forest model
-model.fit(X_train, y_train)
+# # Train the Random Forest model
+# model.fit(X_train, y_train)
 
 # # Make predictions using the trained Random Forest model
 # predictions = model.predict(X_test)
