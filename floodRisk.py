@@ -1,12 +1,8 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
-from sklearn.ensemble import RandomForestClassifier
 import streamlit as st
+import joblib
 
-excel_file_path = 'floodsouth.xlsx'
-
-data = pd.read_excel(excel_file_path)
+# Load the pre-trained model and feature names
+model = joblib.load('randomForestModel.pkl')  # Load your model file
 
 # Mapping for 'ชื่อจังหวัด' column
 district_labels = {
@@ -32,42 +28,13 @@ binary_labels = {
     1: "Occur",
     0: "Not Occur"
 }
-# print(list(district_labels.values()))
-# Invert the district_labels dictionary to create a mapping from names to keys
+
+features = ['ชื่อจังหวัด', 'ปีละครั้ง1มากกว่า', '2 ปีต่อครั้ง', '3 ปีต่อครั้ง', '4-9 ปีต่อครั้ง',
+                '10 ปีต่อครั้ง1น้อยกว่า',
+                'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม',
+                'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
+
 district_names_to_keys = {v: k for k, v in district_labels.items()}
-
-# Replace district names in the DataFrame column with their corresponding keys
-data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(district_names_to_keys)
-# print(data['ชื่อจังหวัด'])
-
-# Define features and target variable
-features = ['ชื่อจังหวัด', 'ปีละครั้ง1มากกว่า', '2 ปีต่อครั้ง', '3 ปีต่อครั้ง', '4-9 ปีต่อครั้ง', '10 ปีต่อครั้ง1น้อยกว่า',
-            'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม',
-            'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
-target = ['ระดับความเสี่ยง']
-
-X = data[features]
-y = data[target].values.ravel()
-
-# Split the data into train and test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-
-# Initialize the Random Forest Classifier
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-
-# Train the Random Forest model
-model.fit(X_train, y_train)
-
-# # Make predictions using the trained Random Forest model
-# predictions = model.predict(X_test)
-#
-# # Evaluate the Random Forest model
-# accuracy = accuracy_score(y_test, predictions)
-# print(f"Accuracy: {accuracy}")
-#
-# # Get classification report for Random Forest
-# print(classification_report(y_test, predictions))
 
 # Create Streamlit app=================================================================>
 st.title('Flood Risk Prediction')
@@ -82,6 +49,7 @@ with st.container():
     st.write('The model has been trained and is ready for predictions.')
 
     input_features = {}
+
     for feature in features:
         if feature == 'ชื่อจังหวัด':
             district_select = st.selectbox('Select District', list(district_labels.values()))
