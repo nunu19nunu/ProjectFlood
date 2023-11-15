@@ -1,6 +1,7 @@
+openpyxl
+pandas
 joblib
 streamlit
 matplotlib
 numpy
 scikit-learn
-pandas
