@@ -95,7 +95,6 @@ print(f"Accuracy: {accuracy}")
 print(classification_report(y_test, predictions))
 
 # Create Streamlit app=================================================================>
-# Create Streamlit app
 st.title('Flood Risk Prediction')
 
 st.write('Random Forest Classifier is trained and ready for predictions.')
@@ -104,26 +103,33 @@ st.write('Random Forest Classifier is trained and ready for predictions.')
 input_features = {}
 for feature in features:
     if feature == 'ชื่อจังหวัด':
-        district_number = st.selectbox('Select District', list(district_labels.keys()))
-        # input_features[feature] = district_labels[district_number]
-        input_features[feature] = district_number
-        st.write(f'Selected District: {district_labels[district_number]}')
+        district_select = st.selectbox('Select District', list(district_labels.values()))
+        input_features[feature] = district_names_to_keys.get(district_select)
+        st.write(f'Selected District: {district_select}')
     else:
         user_input = st.radio(f'{feature} (Select)', list(binary_labels.values()), key=feature)
         input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
         st.write(f'{feature}: {user_input}')
 
-# Make a prediction based on user inputs
-input_data = pd.DataFrame([input_features])
+# Add a button for prediction
+if st.button('Predict'):
+    # Make a prediction based on user inputs
+    input_data = pd.DataFrame([input_features])
 
-# Make prediction using the trained model
-prediction = model.predict(input_data)
-predicted_class = prediction[0]
+    # Make prediction using the trained model
+    prediction = model.predict(input_data)
+    predicted_class = prediction[0]
 
-# Map the predicted class to a user-friendly label
-predicted_label = 'Occur' if predicted_class == 1 else 'Not Occur'
-
-st.write('Prediction:', predicted_label)
+    risk_level_labels = {
+        1: 'Low',
+        2: 'Moderate',
+        3: 'Medium',
+        4: 'High',
+        5: 'Very High'
+    }
+    # Predict the risk level based on the predicted class
+    predicted_risk_level = risk_level_labels[predicted_class]
+    st.write('Predicted Risk Level:', predicted_risk_level)
 
 
 
