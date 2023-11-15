@@ -86,11 +86,11 @@ with st.container():
         if feature == 'ชื่อจังหวัด':
             district_select = st.selectbox('Select District', list(district_labels.values()))
             input_features[feature] = district_names_to_keys.get(district_select)
-            # st.write(f'Selected District: {district_select}')
+            st.write(f'Selected District: {district_select}')
         else:
             user_input = st.radio(f'{feature}', list(binary_labels.values()), key=feature)
             input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
-            # st.write(f'{feature}: {user_input}')
+            st.write(f'{feature}: {user_input}')
 
     # Add a button for prediction
     if st.button('Predict'):
@@ -111,10 +111,3 @@ with st.container():
         # Predict the risk level based on the predicted class
         predicted_risk_level = risk_level_labels[predicted_class]
         st.write('Predicted Risk Level:', predicted_risk_level)
-
-        # Evaluate the Random Forest model
-        accuracy = accuracy_score(y_test, prediction)
-        st.write('Accuracy:', accuracy)
-
-        # Get classification report for Random Forest
-        st.write('Classification report:', classification_report(y_test, prediction))
