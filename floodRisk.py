@@ -97,12 +97,12 @@ print(classification_report(y_test, predictions))
 # Create Streamlit app=================================================================>
 st.title('Flood Risk Prediction')
 
-expander = st.beta_expander("About")
+expander = st.expander("About")
 expander.write(
     "This app predicts the risk level of floods based on various parameters using a Random Forest Classifier."
 )
 
-with st.beta_container():
+with st.container():
     st.header('Random Forest Classifier')
     st.write('The model has been trained and is ready for predictions.')
 
