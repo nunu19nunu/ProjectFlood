@@ -1,5 +1,6 @@
 import streamlit as st
 import joblib
+import pandas as pd
 
 # Load the pre-trained model and feature names
 model = joblib.load('randomForestModel.pkl')  # Load your model file
@@ -49,16 +50,20 @@ with st.container():
     st.write('The model has been trained and is ready for predictions.')
 
     input_features = {}
-
+    col1, col2 = st.columns(2)
     for feature in features:
         if feature == 'ชื่อจังหวัด':
             district_select = st.selectbox('Select District', list(district_labels.values()))
             input_features[feature] = district_names_to_keys.get(district_select)
             st.write(f'Selected District: {district_select}')
+            st.divider()
         else:
-            user_input = st.radio(f'{feature}', list(binary_labels.values()), key=feature)
-            input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
-            st.write(f'{feature}: {user_input}')
+            with col1:
+                user_input = st.radio(f'{feature}', list(binary_labels.values()), key=feature)
+                input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
+            with col2:
+                st.write(f'{feature}: {user_input}')
+                st.divider()
 
     # Add a button for prediction
     if st.button('Predict'):
