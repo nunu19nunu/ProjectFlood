@@ -9,9 +9,60 @@ excel_file_path = 'floodsouth.xlsx'
 data = pd.read_excel(excel_file_path)
 
 # change district to number===================================================>
-unique_provinces = data['ชื่อจังหวัด'].unique()
-province_to_number = {province: i + 1 for i, province in enumerate(unique_provinces)}
-data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(province_to_number)
+# unique_provinces = data['ชื่อจังหวัด'].unique()
+# province_to_number = {province: i + 1 for i, province in enumerate(unique_provinces)}
+# data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(province_to_number)
+# print(data['ชื่อจังหวัด'])
+
+# # Mapping for 'ชื่อจังหวัด' column
+# district_to_number = {
+#     "กระบี่": 1,
+#     "ชุมพร": 2,
+#     "ตรัง": 3,
+#     "นครศรีธรรมราช": 4,
+#     "นราธิวาส": 5,
+#     "ปัตตานี": 6,
+#     "พังงา": 7,
+#     "พัทลุง": 8,
+#     "ภูเก็ต": 9,
+#     "ยะลา": 10,
+#     "ระนอง": 11,
+#     "สงขลา": 12,
+#     "สตูล": 13,
+#     "สุราษฎร์ธานี": 14
+#     # Add mappings for other districts...
+# }
+
+# Mapping for 'ชื่อจังหวัด' column
+district_labels = {
+    1: "กระบี่",
+    2: "ชุมพร",
+    3: "ตรัง",
+    4: "นครศรีธรรมราช",
+    5: "นราธิวาส",
+    6: "ปัตตานี",
+    7: "พังงา",
+    8: "พัทลุง",
+    9: "ภูเก็ต",
+    10: "ยะลา",
+    11: "ระนอง",
+    12: "สงขลา",
+    13: "สตูล",
+    14: "สุราษฎร์ธานี"
+    # Add mappings for other districts...
+}
+
+# Map for binary columns
+binary_labels = {
+    1: "Occur",
+    0: "Not Occur"
+}
+print(list(district_labels.values()))
+# Invert the district_labels dictionary to create a mapping from names to keys
+district_names_to_keys = {v: k for k, v in district_labels.items()}
+
+# Replace district names in the DataFrame column with their corresponding keys
+data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(district_names_to_keys)
 print(data['ชื่อจังหวัด'])
 
 # Define features and target variable
@@ -25,7 +76,6 @@ y = data[target].values.ravel()
 
 # Split the data into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
 
 
 # Initialize the Random Forest Classifier
@@ -45,21 +95,35 @@ print(f"Accuracy: {accuracy}")
 print(classification_report(y_test, predictions))
 
 # Create Streamlit app=================================================================>
+# Create Streamlit app
 st.title('Flood Risk Prediction')
 
 st.write('Random Forest Classifier is trained and ready for predictions.')
 
-# Add inputs for features (you can customize this)
-feature_inputs = {}
+# Add inputs for features
+input_features = {}
 for feature in features:
-    feature_inputs[feature] = st.number_input(f'Enter value for {feature}', value=0)
+    if feature == 'ชื่อจังหวัด':
+        district_number = st.selectbox('Select District', list(district_labels.keys()))
+        # input_features[feature] = district_labels[district_number]
+        input_features[feature] = district_number
+        st.write(f'Selected District: {district_labels[district_number]}')
+    else:
+        user_input = st.radio(f'{feature} (Select)', list(binary_labels.values()), key=feature)
+        input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
+        st.write(f'{feature}: {user_input}')
 
 # Make a prediction based on user inputs
-input_data = pd.DataFrame([feature_inputs])
-prediction = model.predict(input_data)
+input_data = pd.DataFrame([input_features])
 
-st.write('Prediction:')
-st.write(prediction)
+# Make prediction using the trained model
+prediction = model.predict(input_data)
+predicted_class = prediction[0]
+
+# Map the predicted class to a user-friendly label
+predicted_label = 'Occur' if predicted_class == 1 else 'Not Occur'
+
+st.write('Prediction:', predicted_label)
 
 
 
