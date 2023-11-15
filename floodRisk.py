@@ -59,15 +59,15 @@ model = RandomForestClassifier(n_estimators=100, random_state=42)  # You can adj
 # Train the Random Forest model
 model.fit(X_train, y_train)
 
-# Make predictions using the trained Random Forest model
-predictions = model.predict(X_test)
-
-# Evaluate the Random Forest model
-accuracy = accuracy_score(y_test, predictions)
-print(f"Accuracy: {accuracy}")
-
-# Get classification report for Random Forest
-print(classification_report(y_test, predictions))
+# # Make predictions using the trained Random Forest model
+# predictions = model.predict(X_test)
+#
+# # Evaluate the Random Forest model
+# accuracy = accuracy_score(y_test, predictions)
+# print(f"Accuracy: {accuracy}")
+#
+# # Get classification report for Random Forest
+# print(classification_report(y_test, predictions))
 
 # Create Streamlit app=================================================================>
 st.title('Flood Risk Prediction')
@@ -84,11 +84,11 @@ with st.container():
     input_features = {}
     for feature in features:
         if feature == 'ชื่อจังหวัด':
-            district_select = st.selectbox('<h3>เลือกจังหวัด</h3>', list(district_labels.values()))
+            district_select = st.selectbox('Select District', list(district_labels.values()))
             input_features[feature] = district_names_to_keys.get(district_select)
             # st.write(f'Selected District: {district_select}')
         else:
-            user_input = st.radio(f'<h3>{feature}</h3>', list(binary_labels.values()), key=feature)
+            user_input = st.radio(f'{feature}', list(binary_labels.values()), key=feature)
             input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
             # st.write(f'{feature}: {user_input}')
 
@@ -111,3 +111,10 @@ with st.container():
         # Predict the risk level based on the predicted class
         predicted_risk_level = risk_level_labels[predicted_class]
         st.write('Predicted Risk Level:', predicted_risk_level)
+
+        # Evaluate the Random Forest model
+        accuracy = accuracy_score(y_test, prediction)
+        st.write('Accuracy:', accuracy)
+
+        # Get classification report for Random Forest
+        st.write('Classification report:', classification_report(y_test, prediction))
