@@ -63,7 +63,7 @@ with st.container():
                 input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
             with col2:
                 st.write(f'{feature}: {user_input}')
-                st.divider()
+            st.divider()
 
     # Add a button for prediction
     if st.button('Predict'):
