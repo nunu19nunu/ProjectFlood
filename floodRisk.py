@@ -8,31 +8,6 @@ excel_file_path = 'floodsouth.xlsx'
 
 data = pd.read_excel(excel_file_path)
 
-# change district to number===================================================>
-# unique_provinces = data['ชื่อจังหวัด'].unique()
-# province_to_number = {province: i + 1 for i, province in enumerate(unique_provinces)}
-# data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(province_to_number)
-# print(data['ชื่อจังหวัด'])
-
-# # Mapping for 'ชื่อจังหวัด' column
-# district_to_number = {
-#     "กระบี่": 1,
-#     "ชุมพร": 2,
-#     "ตรัง": 3,
-#     "นครศรีธรรมราช": 4,
-#     "นราธิวาส": 5,
-#     "ปัตตานี": 6,
-#     "พังงา": 7,
-#     "พัทลุง": 8,
-#     "ภูเก็ต": 9,
-#     "ยะลา": 10,
-#     "ระนอง": 11,
-#     "สงขลา": 12,
-#     "สตูล": 13,
-#     "สุราษฎร์ธานี": 14
-#     # Add mappings for other districts...
-# }
-
 # Mapping for 'ชื่อจังหวัด' column
 district_labels = {
     1: "กระบี่",
@@ -109,13 +84,13 @@ with st.container():
     input_features = {}
     for feature in features:
         if feature == 'ชื่อจังหวัด':
-            district_select = st.selectbox('Select District', list(district_labels.values()))
+            district_select = st.selectbox('<h3>เลือกจังหวัด</h3>', list(district_labels.values()))
             input_features[feature] = district_names_to_keys.get(district_select)
-            st.write(f'Selected District: {district_select}')
+            # st.write(f'Selected District: {district_select}')
         else:
-            user_input = st.radio(f'{feature} (Select)', list(binary_labels.values()), key=feature)
+            user_input = st.radio(f'<h3>{feature}</h3>', list(binary_labels.values()), key=feature)
             input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
-            st.write(f'{feature}: {user_input}')
+            # st.write(f'{feature}: {user_input}')
 
     # Add a button for prediction
     if st.button('Predict'):
