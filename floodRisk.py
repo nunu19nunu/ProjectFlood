@@ -97,45 +97,42 @@ print(classification_report(y_test, predictions))
 # Create Streamlit app=================================================================>
 st.title('Flood Risk Prediction')
 
-st.write('Random Forest Classifier is trained and ready for predictions.')
+expander = st.beta_expander("About")
+expander.write(
+    "This app predicts the risk level of floods based on various parameters using a Random Forest Classifier."
+)
 
-# Add inputs for features
-input_features = {}
-for feature in features:
-    if feature == 'ชื่อจังหวัด':
-        district_select = st.selectbox('Select District', list(district_labels.values()))
-        input_features[feature] = district_names_to_keys.get(district_select)
-        st.write(f'Selected District: {district_select}')
-    else:
-        user_input = st.radio(f'{feature} (Select)', list(binary_labels.values()), key=feature)
-        input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
-        st.write(f'{feature}: {user_input}')
+with st.beta_container():
+    st.header('Random Forest Classifier')
+    st.write('The model has been trained and is ready for predictions.')
 
-# Add a button for prediction
-if st.button('Predict'):
-    # Make a prediction based on user inputs
-    input_data = pd.DataFrame([input_features])
+    input_features = {}
+    for feature in features:
+        if feature == 'ชื่อจังหวัด':
+            district_select = st.selectbox('Select District', list(district_labels.values()))
+            input_features[feature] = district_names_to_keys.get(district_select)
+            st.write(f'Selected District: {district_select}')
+        else:
+            user_input = st.radio(f'{feature} (Select)', list(binary_labels.values()), key=feature)
+            input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
+            st.write(f'{feature}: {user_input}')
 
-    # Make prediction using the trained model
-    prediction = model.predict(input_data)
-    predicted_class = prediction[0]
+    # Add a button for prediction
+    if st.button('Predict'):
+        # Make a prediction based on user inputs
+        input_data = pd.DataFrame([input_features])
 
-    risk_level_labels = {
-        1: 'Low',
-        2: 'Moderate',
-        3: 'Medium',
-        4: 'High',
-        5: 'Very High'
-    }
-    # Predict the risk level based on the predicted class
-    predicted_risk_level = risk_level_labels[predicted_class]
-    st.write('Predicted Risk Level:', predicted_risk_level)
+        # Make prediction using the trained model
+        prediction = model.predict(input_data)
+        predicted_class = prediction[0]
 
-
-
-
-
-
-
-
-
+        risk_level_labels = {
+            1: 'Low',
+            2: 'Moderate',
+            3: 'Medium',
+            4: 'High',
+            5: 'Very High'
+        }
+        # Predict the risk level based on the predicted class
+        predicted_risk_level = risk_level_labels[predicted_class]
+        st.write('Predicted Risk Level:', predicted_risk_level)
