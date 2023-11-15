@@ -58,11 +58,9 @@ with st.container():
             st.write(f'Selected District: {district_select}')
             st.divider()
         else:
-            with col1:
-                user_input = st.radio(f'{feature}', list(binary_labels.values()), key=feature)
-                input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
-            with col2:
-                st.write(f'{feature}: {user_input}')
+            user_input = st.radio(f'{feature}', list(binary_labels.values()), key=feature)
+            input_features[feature] = next(key for key, value in binary_labels.items() if value == user_input)
+            st.write(f'{feature}: {user_input}')
             st.divider()
 
     # Add a button for prediction
