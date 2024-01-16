@@ -4,8 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 import matplotlib.pyplot as plt
 
-excel_file_path = 'floodsouth.xlsx'
-
+excel_file_path = 'floodsouth v1.xlsx'
 data = pd.read_excel(excel_file_path)
 
 # change district to number===================================================>
@@ -31,7 +30,7 @@ from sklearn.ensemble import RandomForestClassifier  # Import Random Forest Clas
 # ... (previous code remains the same)
 
 # Initialize the Random Forest Classifier
-model = RandomForestClassifier(n_estimators=100, random_state=42)  # You can adjust the number of estimators (n_estimators) as needed
+model = LogisticRegression(multi_class='multinomial', max_iter=1000)
 
 # Train the Random Forest model
 model.fit(X_train, y_train)
@@ -45,36 +44,6 @@ print(f"Accuracy: {accuracy}")
 
 # Get classification report for Random Forest
 print(classification_report(y_test, predictions))
-
-
-
-# # Initialize the model (you can try other classifiers too)===================================================>
-# model = LogisticRegression()
-#
-# # Train the model
-# model.fit(X_train, y_train)
-#
-# # Make predictions
-# predictions = model.predict(X_test)
-#
-# # Evaluate the model
-# accuracy = accuracy_score(y_test, predictions)
-# print(f"Accuracy: {accuracy}")
-#
-# # Get classification report
-# print(classification_report(y_test, predictions))
-#
-# # Make predictions on the test set
-# predictions = model.predict(X_test)
-#
-# # Plotting actual vs predicted values
-# plt.figure(figsize=(8, 6))
-# plt.scatter(y_test, predictions)
-# plt.xlabel('Actual')
-# plt.ylabel('Predicted')
-# plt.title('Actual vs Predicted Values')
-# plt.show()
-
 
 
 # Create custom data for prediction

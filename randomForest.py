@@ -5,42 +5,42 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.ensemble import RandomForestClassifier
 
 
-excel_file_path = 'floodsouth.xlsx'
+excel_file_path = 'floodsouth v1.xlsx'
 
 data = pd.read_excel(excel_file_path)
 
 # Mapping for 'ชื่อจังหวัด' column
-district_labels = {
-    1: "กระบี่",
-    2: "ชุมพร",
-    3: "ตรัง",
-    4: "นครศรีธรรมราช",
-    5: "นราธิวาส",
-    6: "ปัตตานี",
-    7: "พังงา",
-    8: "พัทลุง",
-    9: "ภูเก็ต",
-    10: "ยะลา",
-    11: "ระนอง",
-    12: "สงขลา",
-    13: "สตูล",
-    14: "สุราษฎร์ธานี"
-    # Add mappings for other districts...
-}
+# district_labels = {
+#     1: "กระบี่",
+#     2: "ชุมพร",
+#     3: "ตรัง",
+#     4: "นครศรีธรรมราช",
+#     5: "นราธิวาส",
+#     6: "ปัตตานี",
+#     7: "พังงา",
+#     8: "พัทลุง",
+#     9: "ภูเก็ต",
+#     10: "ยะลา",
+#     11: "ระนอง",
+#     12: "สงขลา",
+#     13: "สตูล",
+#     14: "สุราษฎร์ธานี"
+#     # Add mappings for other districts...
+# }
 
-print(list(district_labels.values()))
-# Invert the district_labels dictionary to create a mapping from names to keys
-district_names_to_keys = {v: k for k, v in district_labels.items()}
+# print(list(district_labels.values()))
+# # Invert the district_labels dictionary to create a mapping from names to keys
+# district_names_to_keys = {v: k for k, v in district_labels.items()}
 
 # Replace district names in the DataFrame column with their corresponding keys
-data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(district_names_to_keys)
-print(data['ชื่อจังหวัด'])
+# data['ชื่อจังหวัด'] = data['ชื่อจังหวัด'].map(district_names_to_keys)
+# print(data['ชื่อจังหวัด'])
 
 # Define features and target variable
-features = ['ชื่อจังหวัด', 'ปีละครั้ง1มากกว่า', '2 ปีต่อครั้ง', '3 ปีต่อครั้ง', '4-9 ปีต่อครั้ง', '10 ปีต่อครั้ง1น้อยกว่า',
-            'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม',
-            'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
-target = ['ระดับความเสี่ยง']
+features = ['province', 'flooding', 'Water overflowing the banks', 'flash flood', '1year_more', '2year_more', '3year_more',
+            '4-9 year_more', '10year_more', 'not flooding the house', 'but they were habitable', 'had to be evacuated', 'Transportation routes', 'public benefit', 'agricultural area',
+            'fishing', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Sep', 'Nov', 'Dec']
+target = ['Risk']
 
 X = data[features]
 y = data[target].values.ravel()
