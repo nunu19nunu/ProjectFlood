@@ -3,7 +3,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.ensemble import RandomForestClassifier
-
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 excel_file_path = 'floodsouth v1.xlsx'
 
@@ -37,9 +39,10 @@ data = pd.read_excel(excel_file_path)
 # print(data['ชื่อจังหวัด'])
 
 # Define features and target variable
-features = ['province', 'flooding', 'Water overflowing the banks', 'flash flood', '1year_more', '2year_more', '3year_more',
-            '4-9 year_more', '10year_more', 'not flooding the house', 'but they were habitable', 'had to be evacuated', 'Transportation routes', 'public benefit', 'agricultural area',
-            'fishing', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Sep', 'Nov', 'Dec']
+features = ['flooding', 'overflow', 'flashflood', 'feq2', 'feq3', 'feq4',
+              'house', 'habitable', 'evacuated', 'transportation', 'benefit',
+              'area', 'fishing', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 target = ['Risk']
 
 X = data[features]
@@ -68,3 +71,11 @@ print(f"Accuracy: {accuracy}")
 # Get classification report for Random Forest
 print(classification_report(y_test, predictions))
 
+
+conf_matrix = confusion_matrix(y_test, predictions)
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=model.classes_, yticklabels=model.classes_)
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+plt.show()
