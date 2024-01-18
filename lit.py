@@ -38,30 +38,43 @@ def predict_province_result(input_data):
     predicted_class = prediction[0]
 
     risk_level_labels = {
-        1: 'Low',
-        2: 'Moderate',
-        3: 'Medium',
-        4: 'High',
-        5: 'Very High'
+        1: 'ต่ำมากหรืออาจจะไม่เกิดขึ้นเลย ',
+        2: 'ต่ำ ',
+        3: 'ปานกลาง ',
+        4: 'สูง! ',
+        5: 'สูงมาก!! '
     }
     predicted_risk_level = risk_level_labels[predicted_class]
 
     return predicted_risk_level
 
+
 def main():
-    st.title("การทำนายความเสี่ยงน้ำท่วมในภาคใต้")
+    st.title("การทำนายความเสี่ยงน้ำท่วมในภาคใต้ :rain_cloud::lightning_cloud:")
     input_features = {}
 
     # User input
     province_input = st.selectbox("กรุณาเลือกจังหวัด:", ["เลือกจังหวัด"] + list(province_mapping.values()))
     input_features['province'] = get_key_by_value(province_mapping, province_input)
 
+    st.subheader("ประเภทอุทกภัย", divider='rainbow')
     # Create radio buttons for each variable
     for column in selected_columns:
+
+        if selected_columns[column] == "2 ปีครั้ง":
+            st.subheader("ค่าเฉลี่ยในการเกิดอุทกภัย", divider='rainbow')
+        elif selected_columns[column] == "น้ำท่วมแต่ไม่ท่วมบ้าน":
+            st.subheader("ความเสี่ยงของความรุนแรง", divider='rainbow')
+        elif selected_columns[column] == "เส้นทางคมนาคม":
+            st.subheader("ความเสี่ยงเสียหายร่วม", divider='rainbow')
+        elif selected_columns[column] == "มกราคม":
+            st.subheader("ช่วงเดือนที่มีความเสี่ยง", divider='rainbow')
+
+
         # Map for binary columns
         binary_labels = {
-            1: "เกิด",
-            0: "ไม่เกิด"
+            1: "เคยเกิดขึ้น",
+            0: "ไม่เคยเกิดขึ้น"
         }
         option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), key=column)
         input_features[column] = get_key_by_value(binary_labels, option_input)
