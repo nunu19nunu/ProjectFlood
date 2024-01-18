@@ -62,13 +62,13 @@ def main():
     for column in selected_columns:
 
         if selected_columns[column] == "2 ปีครั้ง":
-            st.subheader("ค่าเฉลี่ยในการเกิดอุทกภัย", divider='rainbow')
+            st.subheader("ความถี่ในการเกิดอุทกภัย", divider='rainbow')
         elif selected_columns[column] == "น้ำท่วมแต่ไม่ท่วมบ้าน":
-            st.subheader("ความเสี่ยงของความรุนแรง", divider='rainbow')
+            st.subheader("ความรุนแรงในการเกิดอุทกภัย", divider='rainbow')
         elif selected_columns[column] == "เส้นทางคมนาคม":
-            st.subheader("ความเสี่ยงเสียหายร่วม", divider='rainbow')
+            st.subheader("ผลกระทบในการเกิดอุทกภัย", divider='rainbow')
         elif selected_columns[column] == "มกราคม":
-            st.subheader("ช่วงเดือนที่มีความเสี่ยง", divider='rainbow')
+            st.subheader("เดือนที่เคยเกิดอุทกภัย", divider='rainbow')
 
 
         # Map for binary columns
@@ -87,7 +87,7 @@ def main():
         else:
             input_data = pd.DataFrame([input_features])
             result = predict_province_result(input_data)
-            st.text(f"{province_input}: ความเสี่ยงเกิดน้ำท่วม {result}")
+            st.text(f"{province_input}: ความเสี่ยงเกิดน้ำท่วมระดับ {result}")
             # st.text(f"{province_input}: ความน่าจะเป็นเกิดน้ำท่วม {result * 100:.2f}%")
 
 if __name__ == '__main__':
