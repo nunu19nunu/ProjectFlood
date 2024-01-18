@@ -4,7 +4,7 @@ import pandas as pd
 
 model = joblib.load('randomforestv2.pkl')  # Load your model file
 
-selected_columns = {'flooding':'น้ำท่วมขัง' , 'overflow':'น้ำล้นตลิ่ง', 'flashflood':'น้ำท่วมฉับพลัน', 'feq2':'2 ปีครั้ง', 'feq3':'3 ปีครั้ง', 'feq4':'4 ปีครั้ง', 'house':'น้ำท่วมแต่ไม่ท่วมบ้าน',
+selected_columns = {'flooding' :'น้ำท่วมขัง', 'overflow':'น้ำล้นตลิ่ง', 'flashflood':'น้ำท่วมฉับพลัน', 'feq2':'2 ปีครั้ง', 'feq3':'3 ปีครั้ง', 'feq4':'4 ปีครั้ง', 'house':'น้ำท่วมแต่ไม่ท่วมบ้าน',
                     'habitable':'น้ำท่วมบางส่วนแต่อาศัยได้', 'evacuated':'น้ำท่วมบ้านต้องอพยพ', 'transportation':'เส้นทางคมนาคม', 'benefit':'สาธารณประโยชน์', 'area':'พื้นที่การเกษตร', 'fishing':'การประมง', 'Jan':'มกราคม', 'Feb':'กุมภาพันธ์', 'Mar':'มีนาคม',
                     'Apr':'เมษายน', 'May':'พฤษภาคม', 'Jun':'มิถุนายน', 'Jul':'กรกฎาคม', 'Aug':'สิงหาคม', 'Sep':'กันยายน', 'Oct':'ตุลาคม', 'Nov':'พฤศจิกายน', 'Dec':'ธันวาคม'}
 
@@ -93,41 +93,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-    # User input
-
-
-    # # Split the header into sections
-    # section1 = ['น้ำท่วมขัง', 'น้ำล้นตลิ่ง', 'น้ำท่วมฉับพลัน']
-    # section2 = ['2 ปีครั้ง', '3 ปีครั้ง', '4 ปีครั้ง']
-    # section3 = ['น้ำท่วมแต่ไม่ท่วมบ้าน', 'น้ำท่วมบางส่วนแต่อาศัยได้', 'น้ำท่วมบ้านต้องอพยพ']
-    # section4 = ['เส้นทางคมนาคม', 'สาธารณประโยชน์', 'พื้นที่การเกษตร', 'การประมง']
-    # section5 = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน',
-    #             'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
-    #
-    # # Display the header using st.beta_columns
-    # col1, col2, col3, col4, col5 = st.columns(5)
-    #
-    # with col1:
-    #     st.text(section1[0])
-    #     st.text(section1[1])
-    #     st.text(section1[2])
-    #
-    # with col2:
-    #     st.text(section2[0])
-    #     st.text(section2[1])
-    #     st.text(section2[2])
-    #
-    # with col3:
-    #     st.text(section3[0])
-    #     st.text(section3[1])
-    #     st.text(section3[2])
-    #
-    # with col4:
-    #     st.text(section4[0])
-    #     st.text(section4[1])
-    #     st.text(section4[2])
-    #     st.text(section4[3])
-    #
-    # with col5:
-    #     for month in section5:
-    #         st.text(month)
