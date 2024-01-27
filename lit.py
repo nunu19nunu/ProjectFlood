@@ -50,7 +50,10 @@ def predict_province_result(input_data):
 
 
 def main():
-    st.title("การทำนายความเสี่ยงน้ำท่วมในภาคใต้ :rain_cloud::lightning_cloud:")
+    st.title("โปรแกรมทำนายอุทกภัยในภาคใต้ :rain_cloud::lightning_cloud:")
+
+    st.caption("อ้างอิงข้อมูล: กรมป้องกันและบรรเทาสาธารณภัย")
+
     input_features = {}
 
     # User input
@@ -58,28 +61,37 @@ def main():
     input_features['province'] = get_key_by_value(province_mapping, province_input)
 
     st.subheader("ประเภทอุทกภัย", divider='rainbow')
+
     # Create radio buttons for each variable
     for column in selected_columns:
-
         if selected_columns[column] == "2 ปีครั้ง":
             st.subheader("ความถี่ในการเกิดอุทกภัย", divider='rainbow')
+            st.checkbox("เคยเกิดขึ้น",key="feq_checkbox")
         elif selected_columns[column] == "น้ำท่วมแต่ไม่ท่วมบ้าน":
             st.subheader("ความรุนแรงในการเกิดอุทกภัย", divider='rainbow')
+
         elif selected_columns[column] == "เส้นทางคมนาคม":
             st.subheader("ผลกระทบในการเกิดอุทกภัย", divider='rainbow')
+
         elif selected_columns[column] == "มกราคม":
             st.subheader("เดือนที่เคยเกิดอุทกภัย", divider='rainbow')
-
 
         # Map for binary columns
         binary_labels = {
             1: "เคยเกิดขึ้น",
             0: "ไม่เคยเกิดขึ้น"
         }
-        option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), key=column)
+        option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),index=None, key=column)
         input_features[column] = get_key_by_value(binary_labels, option_input)
 
-    if st.button("ทำนาย"):
+
+            # tye = st.checkbox("เคยเกิดขึ้นทั้งหมด", key="phylum")
+            # fq = st.checkbox("เคยเกิดขึ้นทั้งหมด", key="frequency")
+            # vl = st.checkbox("เคยเกิดขึ้นทั้งหมด", key="violence")
+            # ef = st.checkbox("เคยเกิดขึ้นทั้งหมด", key="effect")
+            # mo = st.checkbox("เคยเกิดขึ้นทั้งหมด", key="mount")
+
+    if st.button("ทำนายความเสี่ยง"):
 
         # Display result
         if province_input == "เลือกจังหวัด":
@@ -88,7 +100,8 @@ def main():
             input_data = pd.DataFrame([input_features])
             result = predict_province_result(input_data)
             st.text(f"{province_input}: ความเสี่ยงเกิดน้ำท่วมระดับ {result}")
-            # st.text(f"{province_input}: ความน่าจะเป็นเกิดน้ำท่วม {result * 100:.2f}%")
+
+
 
 if __name__ == '__main__':
     main()
