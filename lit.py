@@ -66,7 +66,7 @@ def main():
     for column in selected_columns:
         if selected_columns[column] == "2 ปีครั้ง":
             st.subheader("ความถี่ในการเกิดอุทกภัย", divider='rainbow')
-            st.checkbox("เคยเกิดขึ้น",key="feq_checkbox")dsd
+            st.checkbox("เคยเกิดขึ้น",key="feq_checkbox")
         elif selected_columns[column] == "น้ำท่วมแต่ไม่ท่วมบ้าน":
             st.subheader("ความรุนแรงในการเกิดอุทกภัย", divider='rainbow')
 
