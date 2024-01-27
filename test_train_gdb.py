@@ -1,9 +1,11 @@
-import pandas as pd
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+import pandas as pd
+from sklearn.metrics import confusion_matrix
 
-# Initialize the Logistic Regression Classifier
+
+# Load data
 excel_file_path = 'floodsouth v1.xlsx'
 data = pd.read_excel(excel_file_path)
 
@@ -17,17 +19,22 @@ data = data[selected_columns]
 X = data.drop('Risk', axis=1)
 y = data['Risk']
 
+
+# Split the data into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-# ...
 
-model = LogisticRegression(random_state=42, max_iter=1000, multi_class='multinomial', solver='lbfgs')
+# Initialize the Gradient Boosting Classifier
+model = GradientBoostingClassifier(random_state=42)
 
-# Train the Logistic Regression model
+# Train the Gradient Boosting model
 model.fit(X_train, y_train)
 
-# Make predictions using the trained Logistic Regression model on both train and test sets
+#Make predictions using the trained Gradient Boosting model on both train and test sets
 train_predictions = model.predict(X_train)
 test_predictions = model.predict(X_test)
+
+
+cm = confusion_matrix(y_test, test_predictions)
 
 # Evaluate the model on the train set
 train_accuracy = accuracy_score(y_train, train_predictions)
@@ -38,10 +45,11 @@ test_accuracy = accuracy_score(y_test, test_predictions)
 test_classification_report = classification_report(y_test, test_predictions)
 
 # Display the results
-print("Train Accuracy:", train_accuracy)
+print(f"Train Accuracy: {train_accuracy * 100: .2f} %")
 print("Train Classification Report:")
 print(train_classification_report)
 
-print("\nTest Accuracy:", test_accuracy)
+print(f"\nTest Accuracy: {test_accuracy * 100:.2f} %")
 print("Test Classification Report:")
 print(test_classification_report)
+

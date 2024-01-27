@@ -16,6 +16,7 @@ data = data[selected_columns]
 
 # Define features and target
 X = data.drop('Risk', axis=1)
+
 y = data['Risk']
 
 province_mapping = {
@@ -51,7 +52,7 @@ joblib.dump(model, 'randomforestv2.pkl')
 
 # Make predictions using the trained Random Forest model
 predictions = model.predict(X_test)
-
+print(predictions)
 # Evaluate the Random Forest model
 accuracy = accuracy_score(y_test, predictions)
 print(f"Accuracy: {accuracy}")
