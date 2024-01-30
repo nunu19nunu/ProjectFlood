@@ -136,39 +136,8 @@ def main():
                                         key=column)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
-
-
-
-
-    # check = True
-    # def isCheck():
-    #   global check
-    #   for column in selected_columns:
-    #       print(input_features[column])
-    #       if input_features[column] is None:
-    #           print("eiei")
-    #           check = False
-    #           print(check)
-    #           break
-
     if st.button("ทำนายความเสี่ยง"):
         check = True
-
-        def change_check():
-            global check
-            check = False
-        change_check()
-        # def isCheck():
-        #     global check
-        #     for column in selected_columns:
-        #         print(input_features[column])
-        #         if input_features[column] is None:
-        #             print("eiei")
-        #             check = False
-        #             print(check)
-        #             break
-        # isCheck()
-        print(check)
         # Display result
         if province_input == "เลือกจังหวัด":
             st.warning("กรุณาเลือกจังหวัด")
