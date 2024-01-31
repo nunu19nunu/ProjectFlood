@@ -79,7 +79,6 @@ def predict_province_result(input_data):
 
     return predicted_risk_level
 
-
 def main():
     st.title("โปรแกรมทำนายอุทกภัยในภาคใต้ :rain_cloud::lightning_cloud:")
 
@@ -185,13 +184,13 @@ def main():
             result = predict_province_result(input_data)
             st.markdown(f"<h2>{province_input}: ความเสี่ยงเกิดน้ำท่วมระดับ {result}<h/2>", unsafe_allow_html=True)
             if result == 'สูงมาก!! ':
-                st.markdown('<p style="font-size:20px;"> หมายถึง มีความเสี่ยงที่สูงมาก มีผลกระทบร้ายแรงมาก ต้องวางแผนและดำเนินการป้องกันอย่างด่วนที่สุด</p>', unsafe_allow_html=True)
+                st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดผลกระทบร้ายแรงมาก ต้องวางแผนและดำเนินการป้องกันอย่างด่วนที่สุด</p>', unsafe_allow_html=True)
             elif result == 'สูง':
                 st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดความรุนแรงและก่อให้เกิดผลกระทบ ยังไม่จำเป็นต้องป้องกันทันที แต่ต้องมีการวางแผนและเตรียมการสำหรับอนาคตอันใกล้</p>', unsafe_allow_html=True)
             elif result == 'ปานกลาง ':
                 st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดความรุนแรงยังไม่มากแต่อาจจะก่อให้เกิดผลกระทบพอสมควร การป้องกันยังไม่ต้องเร่งด่วน และอาจจำเป็นหรือไม่จำเป็นที่ต้องเตรียมการป้องกัน ขึ้นอยู่กับสถานการณ์ ณ เวลานั้น</p>', unsafe_allow_html=True)
             elif result == 'ต่ำ':
-                st.markdown('<p style="font-size:20px;">ำ หมายถึง ความเสี่ยงต่ำที่มีผลกระทบที่น้อยและไม่รุนแรงอาจจะไม่ต้องดำเนินการป้องกันหรืออะไรเป็นพิเศษ</p>', unsafe_allow_html=True)
+                st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงต่ำที่มีผลกระทบที่น้อยและไม่รุนแรง อาจจะไม่ต้องดำเนินการป้องกันหรืออะไรเป็นพิเศษ</p>', unsafe_allow_html=True)
             else:
                 st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่แทบไม่มีโอกาสในการเกิดอุทกภัย ถ้าเกิดก็จะมีผลกระทบที่ไม่รุนแรงเลยหรือมีผลกระทบน้อยมาก ไม่จำเป็นต้องดำเนินการอะไรเลย</p>', unsafe_allow_html=True)
 
