@@ -4,9 +4,13 @@ import pandas as pd
 
 model = joblib.load('randomforestv2.pkl')  # Load your model file
 
-selected_columns = {'flooding' :'น้ำท่วมขัง', 'overflow':'น้ำล้นตลิ่ง', 'flashflood':'น้ำท่วมฉับพลัน', 'feq2':'2 ปีครั้ง', 'feq3':'3 ปีครั้ง', 'feq4':'4 ปีครั้ง', 'house':'น้ำท่วมแต่ไม่ท่วมบ้าน',
-                    'habitable':'น้ำท่วมบางส่วนแต่อาศัยได้', 'evacuated':'น้ำท่วมบ้านต้องอพยพ', 'transportation':'เส้นทางคมนาคม', 'benefit':'สาธารณประโยชน์', 'area':'พื้นที่การเกษตร', 'fishing':'การประมง', 'Jan':'มกราคม', 'Feb':'กุมภาพันธ์', 'Mar':'มีนาคม',
-                    'Apr':'เมษายน', 'May':'พฤษภาคม', 'Jun':'มิถุนายน', 'Jul':'กรกฎาคม', 'Aug':'สิงหาคม', 'Sep':'กันยายน', 'Oct':'ตุลาคม', 'Nov':'พฤศจิกายน', 'Dec':'ธันวาคม'}
+selected_columns = {'flooding': 'น้ำท่วมขัง', 'overflow': 'น้ำล้นตลิ่ง', 'flashflood': 'น้ำท่วมฉับพลัน',
+                    'feq2': '2 ปีครั้ง', 'feq3': '3 ปีครั้ง', 'feq4': '4 ปีครั้ง', 'house': 'น้ำท่วมแต่ไม่ท่วมบ้าน',
+                    'habitable': 'น้ำท่วมบางส่วนแต่อาศัยได้', 'evacuated': 'น้ำท่วมบ้านต้องอพยพ',
+                    'transportation': 'เส้นทางคมนาคม', 'benefit': 'สาธารณประโยชน์', 'area': 'พื้นที่การเกษตร',
+                    'fishing': 'การประมง', 'Jan': 'มกราคม', 'Feb': 'กุมภาพันธ์', 'Mar': 'มีนาคม',
+                    'Apr': 'เมษายน', 'May': 'พฤษภาคม', 'Jun': 'มิถุนายน', 'Jul': 'กรกฎาคม', 'Aug': 'สิงหาคม',
+                    'Sep': 'กันยายน', 'Oct': 'ตุลาคม', 'Nov': 'พฤศจิกายน', 'Dec': 'ธันวาคม'}
 
 link_mapping = {
     1: "https://kbi.disaster.go.th/krabi/home",
@@ -23,10 +27,6 @@ link_mapping = {
     12: "https://ska.disaster.go.th/dpmsk/home",
     13: "https://stn.disaster.go.th/satun/home",
     14: "https://sni.disaster.go.th/SNI/home"
-
-
-
-
 
 }
 province_mapping = {
@@ -63,8 +63,8 @@ def get_key_by_value(dictionary, value):
             return key
     return None  # If the value is not found
 
-def predict_province_result(input_data):
 
+def predict_province_result(input_data):
     prediction = model.predict(input_data)
     predicted_class = prediction[0]
 
@@ -79,25 +79,35 @@ def predict_province_result(input_data):
 
     return predicted_risk_level
 
+
+
+
+
+def isHaveNone(input_features):
+    for column in selected_columns:
+        print(input_features[column])
+        if input_features[column] is None:
+            print("eiei")
+            return True
+    return False
+
+
 def main():
     st.title("โปรแกรมทำนายอุทกภัยในภาคใต้ :rain_cloud::lightning_cloud:")
 
     st.caption("อ้างอิงข้อมูล: กรมป้องกันและบรรเทาสาธารณภัย")
 
+    # เก็บค่าที่user ทำการ input
     input_features = {}
 
     # User input
     province_input = st.selectbox("กรุณาเลือกจังหวัด:", ["เลือกจังหวัด"] + list(province_mapping.values()))
     input_features['province'] = get_key_by_value(province_mapping, province_input)
 
-
-
     binary_labels = {
         1: "เคยเกิดขึ้น",
         0: "ไม่เคยเกิดขึ้น"
     }
-
-
 
     st.subheader("ประเภทในการเกิดอุทกภัย", divider='rainbow')
     select_all_checkbox1 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox1")
@@ -108,41 +118,45 @@ def main():
                 selected_value1 = "เคยเกิดขึ้น"
             else:
                 selected_value1 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), index=None if selected_value1 is None else 0, key=column)
+            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
+                                    index=None if selected_value1 is None else 0, key=column)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "น้ำท่วมฉับพลัน":
                 st.subheader("ความถี่ในการเกิดอุทกภัย", divider='rainbow')
                 select_all_checkbox2 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox2")
 
+        if selected_columns[column] in ["2 ปีครั้ง", "3 ปีครั้ง", "4 ปีครั้ง"]:
 
-        if selected_columns[column] in ["2 ปีครั้ง","3 ปีครั้ง", "4 ปีครั้ง"]:
             if select_all_checkbox2:
                 selected_value2 = "เคยเกิดขึ้น"
             else:
                 selected_value2 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), index=None if selected_value2 is None else 0, key=column)
+            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
+                                    index=None if selected_value2 is None else 0, key=column)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "4 ปีครั้ง":
                 st.subheader("ความรุนแรงในการเกิดอุทกภัย", divider='rainbow')
                 select_all_checkbox3 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox3")
 
-        elif selected_columns[column] in ["น้ำท่วมแต่ไม่ท่วมบ้าน","น้ำท่วมบางส่วนแต่อาศัยได้", "น้ำท่วมบ้านต้องอพยพ"]:
+        elif selected_columns[column] in ["น้ำท่วมแต่ไม่ท่วมบ้าน", "น้ำท่วมบางส่วนแต่อาศัยได้", "น้ำท่วมบ้านต้องอพยพ"]:
             if select_all_checkbox3:
                 selected_value3 = "เคยเกิดขึ้น"
             else:
                 selected_value3 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), index=None if selected_value3 is None else 0, key=column)
+            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
+                                    index=None if selected_value3 is None else 0, key=column)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "น้ำท่วมบ้านต้องอพยพ":
                 st.subheader("ผลกระทบในการเกิดอุทกภัย", divider='rainbow')
                 select_all_checkbox4 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox4")
 
-        elif selected_columns[column] in ["เส้นทางคมนาคม",'สาธารณประโยชน์', 'พื้นที่การเกษตร', 'การประมง']:
+        elif selected_columns[column] in ["เส้นทางคมนาคม", 'สาธารณประโยชน์', 'พื้นที่การเกษตร', 'การประมง']:
             if select_all_checkbox4:
                 selected_value4 = "เคยเกิดขึ้น"
             else:
                 selected_value4 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), index=None if selected_value4 is None else 0, key=column)
+            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
+                                    index=None if selected_value4 is None else 0, key=column)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "การประมง":
                 st.subheader("เดือนที่เคยเกิดอุทกภัย", divider='rainbow')
@@ -155,45 +169,57 @@ def main():
             else:
                 selected_value5 = None
             with col1:
-                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), index=None if selected_value5 is None else 0,
+                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
+                                        index=None if selected_value5 is None else 0,
                                         key=column)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
-        elif selected_columns[column] in ["พฤษภาคม","มิถุนายน", "กรกฎาคม", "สิงหาคม"]:
+        elif selected_columns[column] in ["พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"]:
             with col2:
-                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), index=None if selected_value5 is None else 0,
+                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
+                                        index=None if selected_value5 is None else 0,
                                         key=column)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
         elif selected_columns[column] in ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]:
 
             with col3:
-                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()), index=None if selected_value5 is None else 0,
+                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
+                                        index=None if selected_value5 is None else 0,
                                         key=column)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
     if st.button("ทำนายความเสี่ยง"):
-        check = True
+        isNone = isHaveNone(input_features)
         # Display result
         if province_input == "เลือกจังหวัด":
             st.warning("กรุณาเลือกจังหวัด")
-        elif check == False:
+        elif isNone == True:
             st.warning("กรุณาเลือกข้อมูลให้ครบถ้วน")
         else:
             input_data = pd.DataFrame([input_features])
             result = predict_province_result(input_data)
             st.markdown(f"<h2>{province_input}: ความเสี่ยงเกิดน้ำท่วมระดับ {result}<h/2>", unsafe_allow_html=True)
             if result == 'สูงมาก!! ':
-                st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดผลกระทบร้ายแรงมาก ต้องวางแผนและดำเนินการป้องกันอย่างด่วนที่สุด</p>', unsafe_allow_html=True)
+                st.markdown(
+                    '<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดผลกระทบร้ายแรงมาก ต้องวางแผนและดำเนินการป้องกันอย่างด่วนที่สุด</p>',
+                    unsafe_allow_html=True)
             elif result == 'สูง':
-                st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดความรุนแรงและก่อให้เกิดผลกระทบ ยังไม่จำเป็นต้องป้องกันทันที แต่ต้องมีการวางแผนและเตรียมการสำหรับอนาคตอันใกล้</p>', unsafe_allow_html=True)
+                st.markdown(
+                    '<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดความรุนแรงและก่อให้เกิดผลกระทบ ยังไม่จำเป็นต้องป้องกันทันที แต่ต้องมีการวางแผนและเตรียมการสำหรับอนาคตอันใกล้</p>',
+                    unsafe_allow_html=True)
             elif result == 'ปานกลาง ':
-                st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดความรุนแรงยังไม่มากแต่อาจจะก่อให้เกิดผลกระทบพอสมควร การป้องกันยังไม่ต้องเร่งด่วน และอาจจำเป็นหรือไม่จำเป็นที่ต้องเตรียมการป้องกัน ขึ้นอยู่กับสถานการณ์ ณ เวลานั้น</p>', unsafe_allow_html=True)
+                st.markdown(
+                    '<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดความรุนแรงยังไม่มากแต่อาจจะก่อให้เกิดผลกระทบพอสมควร การป้องกันยังไม่ต้องเร่งด่วน และอาจจำเป็นหรือไม่จำเป็นที่ต้องเตรียมการป้องกัน ขึ้นอยู่กับสถานการณ์ ณ เวลานั้น</p>',
+                    unsafe_allow_html=True)
             elif result == 'ต่ำ':
-                st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงต่ำที่มีผลกระทบที่น้อยและไม่รุนแรง อาจจะไม่ต้องดำเนินการป้องกันหรืออะไรเป็นพิเศษ</p>', unsafe_allow_html=True)
+                st.markdown(
+                    '<p style="font-size:20px;"> หมายถึง ความเสี่ยงต่ำที่มีผลกระทบที่น้อยและไม่รุนแรง อาจจะไม่ต้องดำเนินการป้องกันหรืออะไรเป็นพิเศษ</p>',
+                    unsafe_allow_html=True)
             else:
-                st.markdown('<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่แทบไม่มีโอกาสในการเกิดอุทกภัย ถ้าเกิดก็จะมีผลกระทบที่ไม่รุนแรงเลยหรือมีผลกระทบน้อยมาก ไม่จำเป็นต้องดำเนินการอะไรเลย</p>', unsafe_allow_html=True)
-
+                st.markdown(
+                    '<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่แทบไม่มีโอกาสในการเกิดอุทกภัย ถ้าเกิดก็จะมีผลกระทบที่ไม่รุนแรงเลยหรือมีผลกระทบน้อยมาก ไม่จำเป็นต้องดำเนินการอะไรเลย</p>',
+                    unsafe_allow_html=True)
 
         province_code = get_key_by_value(province_mapping, province_input)
         if province_code in link_mapping:
@@ -203,11 +229,6 @@ def main():
                         \n**สายด่วนตลอด 24 ชั่วโมง 📞1784🚨**''')
         else:
             st.warning("ไม่พบข้อมูลเพิ่มเติมสำหรับจังหวัดนี้")
-
-
-
-
-
 
 
 if __name__ == '__main__':
