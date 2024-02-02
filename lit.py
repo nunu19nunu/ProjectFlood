@@ -17,7 +17,7 @@ link_mapping = {
     2: "https://cpn.disaster.go.th/CPN/home",
     3: "https://trg.disaster.go.th/TRANG/home",
     4: "https://nrt.disaster.go.th/nst/home",
-    5: "https://nrt.disaster.go.th/nst/home",
+    5: "https://nwt.disaster.go.th/e17/home",
     6: "https://ptn.disaster.go.th/ptn/home",
     7: "https://pna.disaster.go.th/png/home",
     8: "https://plg.disaster.go.th/plg/home",
@@ -93,7 +93,7 @@ def isHaveNone(input_features):
 
 
 def main():
-    st.title("โปรแกรมทำนายอุทกภัยในภาคใต้ :rain_cloud::lightning_cloud:")
+    st.title("โปรแกรมทำนายความเสี่ยงอุทกภัยในภาคใต้ :rain_cloud::lightning_cloud:")
 
     st.caption("อ้างอิงข้อมูล: กรมป้องกันและบรรเทาสาธารณภัย")
 
@@ -105,8 +105,8 @@ def main():
     input_features['province'] = get_key_by_value(province_mapping, province_input)
 
     binary_labels = {
-        1: "เคยเกิดขึ้น",
-        0: "ไม่เคยเกิดขึ้น"
+        1: True,
+        0: False
     }
 
     st.subheader("ประเภทในการเกิดอุทกภัย", divider='rainbow')
@@ -114,12 +114,8 @@ def main():
     for column in selected_columns:
         if selected_columns[column] in ['น้ำท่วมขัง', 'น้ำล้นตลิ่ง', 'น้ำท่วมฉับพลัน']:
 
-            if select_all_checkbox1:
-                selected_value1 = "เคยเกิดขึ้น"
-            else:
-                selected_value1 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
-                                    index=None if selected_value1 is None else 0, key=column)
+            st.text(f'{selected_columns[column]}')
+            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox1 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "น้ำท่วมฉับพลัน":
                 st.subheader("ความถี่ในการเกิดอุทกภัย", divider='rainbow')
@@ -127,36 +123,24 @@ def main():
 
         if selected_columns[column] in ["2 ปีครั้ง", "3 ปีครั้ง", "4 ปีครั้ง"]:
 
-            if select_all_checkbox2:
-                selected_value2 = "เคยเกิดขึ้น"
-            else:
-                selected_value2 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
-                                    index=None if selected_value2 is None else 0, key=column)
+            st.text(f'{selected_columns[column]}')
+            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox2 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "4 ปีครั้ง":
                 st.subheader("ความรุนแรงในการเกิดอุทกภัย", divider='rainbow')
                 select_all_checkbox3 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox3")
 
         elif selected_columns[column] in ["น้ำท่วมแต่ไม่ท่วมบ้าน", "น้ำท่วมบางส่วนแต่อาศัยได้", "น้ำท่วมบ้านต้องอพยพ"]:
-            if select_all_checkbox3:
-                selected_value3 = "เคยเกิดขึ้น"
-            else:
-                selected_value3 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
-                                    index=None if selected_value3 is None else 0, key=column)
+            st.text(f'{selected_columns[column]}')
+            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox3 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "น้ำท่วมบ้านต้องอพยพ":
                 st.subheader("ผลกระทบในการเกิดอุทกภัย", divider='rainbow')
                 select_all_checkbox4 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox4")
 
         elif selected_columns[column] in ["เส้นทางคมนาคม", 'สาธารณประโยชน์', 'พื้นที่การเกษตร', 'การประมง']:
-            if select_all_checkbox4:
-                selected_value4 = "เคยเกิดขึ้น"
-            else:
-                selected_value4 = None
-            option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
-                                    index=None if selected_value4 is None else 0, key=column)
+            st.text(f'{selected_columns[column]}')
+            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox4 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "การประมง":
                 st.subheader("เดือนที่เคยเกิดอุทกภัย", divider='rainbow')
@@ -164,38 +148,35 @@ def main():
 
             col1, col2, col3 = st.columns(3)
         elif selected_columns[column] in ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน"]:
-            if select_all_checkbox5:
-                selected_value5 = "เคยเกิดขึ้น"
-            else:
-                selected_value5 = None
+
             with col1:
-                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
-                                        index=None if selected_value5 is None else 0,
-                                        key=column)
+                st.text(f'{selected_columns[column]}')
+                option_input = st.checkbox("เคยเกิดขึ้น", key=column,
+                                           value=True if select_all_checkbox5 is True else False)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
         elif selected_columns[column] in ["พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"]:
             with col2:
-                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
-                                        index=None if selected_value5 is None else 0,
-                                        key=column)
+                st.text(f'{selected_columns[column]}')
+                option_input = st.checkbox("เคยเกิดขึ้น", key=column,
+                                           value=True if select_all_checkbox5 is True else False)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
         elif selected_columns[column] in ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]:
 
             with col3:
-                option_input = st.radio(f'{selected_columns[column]}', list(binary_labels.values()),
-                                        index=None if selected_value5 is None else 0,
-                                        key=column)
+                st.text(f'{selected_columns[column]}')
+                option_input = st.checkbox("เคยเกิดขึ้น", key=column,
+                                           value=True if select_all_checkbox5 is True else False)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
     if st.button("ทำนายความเสี่ยง"):
-        isNone = isHaveNone(input_features)
+        # isNone = isHaveNone(input_features)
         # Display result
         if province_input == "เลือกจังหวัด":
             st.warning("กรุณาเลือกจังหวัด")
-        elif isNone == True:
-            st.warning("กรุณาเลือกข้อมูลให้ครบถ้วน")
+        # elif isNone == True:
+        #     st.warning("กรุณาเลือกข้อมูลให้ครบถ้วน")
         else:
             input_data = pd.DataFrame([input_features])
             result = predict_province_result(input_data)
