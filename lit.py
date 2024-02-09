@@ -80,6 +80,13 @@ def predict_province_result(input_data):
     return predicted_risk_level
 
 
+color_mapping = {
+    'สูงมาก!! ': 'darkred',     # สีแดงเข้ม
+    'สูง! ': 'red',             # สีแดง
+    'ปานกลาง ': 'orange',    # สีส้ม
+    'ต่ำ ': 'blue',            # สีฟ้า
+    'ต่ำมากหรืออาจจะไม่เกิดขึ้นเลย ': 'green'        # สีเขียว
+}
 
 
 
@@ -93,7 +100,7 @@ def isHaveNone(input_features):
 
 
 def main():
-    st.title("โปรแกรมทำนายความเสี่ยงอุทกภัยในภาคใต้ :rain_cloud::lightning_cloud:")
+    st.title("โปรแกรมคาดคะเนความเสี่ยงอุทกภัยในภาคใต้ :rain_cloud::lightning_cloud:")
 
     st.caption("อ้างอิงข้อมูล: กรมป้องกันและบรรเทาสาธารณภัย")
 
@@ -114,8 +121,8 @@ def main():
     for column in selected_columns:
         if selected_columns[column] in ['น้ำท่วมขัง', 'น้ำล้นตลิ่ง', 'น้ำท่วมฉับพลัน']:
 
-            st.text(f'{selected_columns[column]}')
-            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox1 is True else False)
+
+            option_input = st.checkbox(f'{selected_columns[column]}', key=column, value=True if select_all_checkbox1 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "น้ำท่วมฉับพลัน":
                 st.subheader("ความถี่ในการเกิดอุทกภัย", divider='rainbow')
@@ -123,24 +130,23 @@ def main():
 
         if selected_columns[column] in ["2 ปีครั้ง", "3 ปีครั้ง", "4 ปีครั้ง"]:
 
-            st.text(f'{selected_columns[column]}')
-            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox2 is True else False)
+            option_input = st.checkbox(f'{selected_columns[column]}', key=column, value=True if select_all_checkbox2 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "4 ปีครั้ง":
                 st.subheader("ความรุนแรงในการเกิดอุทกภัย", divider='rainbow')
                 select_all_checkbox3 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox3")
 
         elif selected_columns[column] in ["น้ำท่วมแต่ไม่ท่วมบ้าน", "น้ำท่วมบางส่วนแต่อาศัยได้", "น้ำท่วมบ้านต้องอพยพ"]:
-            st.text(f'{selected_columns[column]}')
-            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox3 is True else False)
+
+            option_input = st.checkbox(f'{selected_columns[column]}', key=column, value=True if select_all_checkbox3 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "น้ำท่วมบ้านต้องอพยพ":
                 st.subheader("ผลกระทบในการเกิดอุทกภัย", divider='rainbow')
                 select_all_checkbox4 = st.checkbox('เคยเกิดขึ้นทั้งหมด', key="select_all_checkbox4")
 
         elif selected_columns[column] in ["เส้นทางคมนาคม", 'สาธารณประโยชน์', 'พื้นที่การเกษตร', 'การประมง']:
-            st.text(f'{selected_columns[column]}')
-            option_input = st.checkbox("เคยเกิดขึ้น", key=column, value=True if select_all_checkbox4 is True else False)
+
+            option_input = st.checkbox(f'{selected_columns[column]}', key=column, value=True if select_all_checkbox4 is True else False)
             input_features[column] = get_key_by_value(binary_labels, option_input)
             if selected_columns[column] == "การประมง":
                 st.subheader("เดือนที่เคยเกิดอุทกภัย", divider='rainbow')
@@ -150,23 +156,23 @@ def main():
         elif selected_columns[column] in ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน"]:
 
             with col1:
-                st.text(f'{selected_columns[column]}')
-                option_input = st.checkbox("เคยเกิดขึ้น", key=column,
+
+                option_input = st.checkbox(f'{selected_columns[column]}', key=column,
                                            value=True if select_all_checkbox5 is True else False)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
         elif selected_columns[column] in ["พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"]:
             with col2:
-                st.text(f'{selected_columns[column]}')
-                option_input = st.checkbox("เคยเกิดขึ้น", key=column,
+
+                option_input = st.checkbox(f'{selected_columns[column]}', key=column,
                                            value=True if select_all_checkbox5 is True else False)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
         elif selected_columns[column] in ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]:
 
             with col3:
-                st.text(f'{selected_columns[column]}')
-                option_input = st.checkbox("เคยเกิดขึ้น", key=column,
+
+                option_input = st.checkbox(f'{selected_columns[column]}', key=column,
                                            value=True if select_all_checkbox5 is True else False)
                 input_features[column] = get_key_by_value(binary_labels, option_input)
 
@@ -180,7 +186,8 @@ def main():
         else:
             input_data = pd.DataFrame([input_features])
             result = predict_province_result(input_data)
-            st.markdown(f"<h2>{province_input}: ความเสี่ยงเกิดน้ำท่วมระดับ {result}<h/2>", unsafe_allow_html=True)
+            text_color = color_mapping[result]
+            st.markdown(f"<h2>{province_input}: ความเสี่ยงเกิดน้ำท่วมระดับ <font color='{text_color}'>{result}</font></h2>", unsafe_allow_html=True)
             if result == 'สูงมาก!! ':
                 st.markdown(
                     '<p style="font-size:20px;"> หมายถึง ความเสี่ยงที่ทำให้เกิดผลกระทบร้ายแรงมาก ต้องวางแผนและดำเนินการป้องกันอย่างด่วนที่สุด</p>',
